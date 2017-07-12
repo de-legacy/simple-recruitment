@@ -28,6 +28,11 @@ if ( file_exists( plugin_dir_path( __FILE__ )."inc/register-cpt-taxonomy.php" ) 
 	require_once(plugin_dir_path( __FILE__ )."inc/register-cpt-taxonomy.php");
 }
 
+if ( file_exists( plugin_dir_path( __FILE__ )."admin/theme-options-cmb.php" ) ) {
+	require_once(plugin_dir_path( __FILE__ )."admin/theme-options-cmb.php");
+}
+
+
 // Register Frontend scripts and styles
 function simple_rec_enqueue_script(){   
 	// Register Scripts
@@ -42,13 +47,14 @@ function simple_rec_enqueue_script(){
 add_action('wp_enqueue_scripts', 'simple_rec_enqueue_script');
 
 function simple_rec_form_html() {
+	global $fullname, $email, $message;
 	$form_url = get_permalink();
 	$form_nonce = wp_nonce_field( 'submit_form', 'form_nonce' );
-	global $fullname, $email, $message;
+
 	$fullname = ( isset( $_POST['fullname'] ) ? $fullname : null );
 	$email = ( isset( $_POST['email'] ) ? $email : null );
 	$message = ( isset( $_POST['message'] ) ? $message : null );
-
+	var_dump(simple_rec_get_option('_simple_rec_email_recipient'));
 	$fields = <<<HTML
 <div id="content" class="simple-rec-wrapper">
 	<span class="title-tes"></span>
@@ -84,7 +90,6 @@ HTML;
 HTML;
 
 	echo $validator_scripts;
-
 }
 
 // Register form Shortcode
@@ -185,8 +190,8 @@ function simple_rec_send_mail($fullname, $email, $message) {
 		$message = esc_textarea($subject);
 
 		// set the variable argument use by the wp_mail
-        $message    =  'Content from external form: '.$fullname.' '.$email;
-        $to         =  'cuteoliv@gmail.com';
+        $message    =  'Content from Simple rec form: '.$fullname.' '.$email;
+        $to         =  simple_rec_get_option('_simple_rec_email_recipient');
         $subject    =  "Receuitment: $fullname <$email>"; 
         $headers    =  "From: $fullname <$email>" . "\r\n";
          
