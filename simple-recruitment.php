@@ -54,7 +54,7 @@ function simple_rec_form_html() {
 	$fullname = ( isset( $_POST['fullname'] ) ? $fullname : null );
 	$email = ( isset( $_POST['email'] ) ? $email : null );
 	$message = ( isset( $_POST['message'] ) ? $message : null );
-	var_dump(simple_rec_get_option('_simple_rec_email_recipient'));
+
 	$fields = <<<HTML
 <div id="content" class="simple-rec-wrapper">
 	<span class="title-tes"></span>
@@ -166,7 +166,7 @@ function simple_rec_create_entry($fullname, $email, $message) {
 			'post_type' => 'simple_rec',
 			'post_status' => 'publish',
 			'post_title' => $fullname.' | '.$email,
-			'post_content' => 'Content from external form: '.$fullname.' '.$email,
+			'post_content' => 'Content from Simple rec form: '.$fullname.' '.$email,
 			'meta_input' => array (
 				"_simple_rec_name" => $fullname,
 				"_simple_rec_email" => $email,
